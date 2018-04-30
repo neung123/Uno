@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.image.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="750.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="display.StartMenuController">
+   <children>
+      <ImageView fx:id="imageViewStart" fitHeight="750.0" fitWidth="1200.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../pic/startwin.jpg" />
+         </image>
+      </ImageView>
+      <TextField fx:id="inputNameField" alignment="CENTER" layoutX="210.0" layoutY="255.0" onAction="#handleEnter" prefHeight="75.0" prefWidth="780.0" promptText="PLAYER 1" style="-fx-background-color: transparent;">
+         <font>
+            <Font size="35.0" />
+         </font>
+      </TextField>
+      <Button fx:id="enterButton" layoutX="471.0" layoutY="408.0" mnemonicParsing="false" onAction="#handleEnter" prefHeight="113.0" prefWidth="259.0" style="-fx-background-color: transparent;" />
+      <Button fx:id="helpButton" layoutX="471.0" layoutY="547.0" mnemonicParsing="false" onAction="#handleHelp" prefHeight="113.0" prefWidth="259.0" style="-fx-background-color: transparent;" />
+   </children>
+</AnchorPane>
