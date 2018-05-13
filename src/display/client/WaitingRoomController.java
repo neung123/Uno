@@ -63,18 +63,15 @@ public class WaitingRoomController implements MessageListener{
         field.setText("");
     }
 
-
-    public void handleCreate() throws IOException {
-        System.out.println("run");
-
+    public void setPage(String fxml,String name)throws IOException{
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("CreateRoom.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource(fxml));
             Scene secondScene = new Scene(root);
 
             // New window (Stage)
             Stage stage = new Stage();
 
-            stage.setTitle("Create Room");
+            stage.setTitle(name);
             stage.setScene(secondScene);
             stage.setResizable(false);
             stage.sizeToScene();
@@ -88,6 +85,19 @@ public class WaitingRoomController implements MessageListener{
             exceptionAlert("Can not open CreateRoom.fxml");
         }
     }
+
+    public void handleCreate() throws IOException {
+        setPage("CreateRoom.fxml","Create Room");
+    }
+
+    public void handleJoin() throws IOException {
+        setPage("JoinRoom.fxml","Join Room");
+    }
+
+    public Stage getStage(){
+        return (Stage) background.getScene().getWindow();
+    }
+
     @Override
     public void onMessage(String message) {
         Platform.runLater(
@@ -102,6 +112,28 @@ public class WaitingRoomController implements MessageListener{
         Platform.runLater(
                 () -> {
                     roomLog.appendText(message);
+                }
+        );
+    }
+
+    @Override
+    public void changeTo(String fxml) {
+
+        Platform.runLater(
+                () -> {
+                    try {
+                        Stage stage = getStage();
+                        Parent root = FXMLLoader.load(getClass().getResource(fxml));
+                        stage.setScene(new Scene(root));
+                        stage.setResizable(false);
+                        stage.sizeToScene();
+                        stage.show();
+
+                    } catch (IOException e) {
+                        exceptionAlert("Can not connect to Server");
+                        getStage().close();
+                    }
+
                 }
         );
     }

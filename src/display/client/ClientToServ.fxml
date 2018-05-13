@@ -10,8 +10,8 @@
    <children>
       <Label layoutX="36.0" layoutY="36.0" prefHeight="21.0" prefWidth="112.0" text="Port to connect:" />
       <Label layoutX="36.0" layoutY="79.0" prefHeight="21.0" prefWidth="112.0" text="Host to connect:" />
-      <TextField fx:id="portText" layoutX="164.0" layoutY="31.0" />
-      <TextField fx:id="hostText" layoutX="164.0" layoutY="74.0" />
+      <TextField fx:id="portText" layoutX="164.0" layoutY="31.0" text="1" />
+      <TextField fx:id="hostText" layoutX="164.0" layoutY="74.0" text="localhost" />
       <Button layoutX="159.0" layoutY="128.0" mnemonicParsing="false" onAction="#handleEnter" text="Enter" />
    </children>
 </AnchorPane>

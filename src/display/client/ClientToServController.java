@@ -21,7 +21,7 @@ public class ClientToServController {
 
     public static String host;
     public static int portNum;
-    final public static int DEFAULT_PORT = 1000;
+    final public static int DEFAULT_PORT = 500;
     
     public void handleEnter(){
         try {

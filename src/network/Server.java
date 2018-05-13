@@ -1,17 +1,33 @@
 package network;
 
+import model.Player;
 import model.Room;
 import server.AbstractServer;
 import server.ConnectionToClient;
 
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.net.SocketException;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
+import static network.Client.*;
+
 public class Server extends AbstractServer {
     public static int ROOM_NUMBER = 1000;
+    private static boolean isConnected = false;
+    public static int ID = 1;
     public static ArrayList<Room> rooms = new ArrayList<>();
+    public static ArrayList<Player> players = new ArrayList<>();
+    private static int DEFAULT_PORT = 1000;
+    private ServerSocket serverSocket = null;
+    private Socket socket = null;
+    private ObjectInputStream inputStream = null;
+    private ObjectOutputStream outputStream = null;
 
     private static LocalTime time = LocalTime.now();
     private static DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm");
@@ -33,16 +49,20 @@ public class Server extends AbstractServer {
 
     @Override
     protected void handleMessageFromClient(Object msg, ConnectionToClient client) {
+
         String message = msg.toString();
-        if(message.contains("#logintoServer")){
-            handleLogin(message,client);
+        if (message.contains("#logintoServer")) {
+            handleLogin(message, client);
             return;
-        }if(message.contains("#createRoom")){
+        }
+        if (message.contains("#createRoom")) {
             handleCreateRoom(message);
             return;
-        }if(message.contains("#joinRoom")){
-            handleJoin(message,client);
+        }
+        if (message.contains("#joinRoom")) {
+            handleJoin(message);
             return;
+        }
 
         String ms = String.format("%s(%s): %s\n",client.getInfo("name"),time.format(dtf),msg.toString());
         this.sendToAllClients(ms);
@@ -58,7 +78,6 @@ public class Server extends AbstractServer {
         super.clientConnected(client);
     }
 
-
     protected void serverStopped() {
         listener.onMessage("Server has stopped.");
     }
@@ -72,36 +91,140 @@ public class Server extends AbstractServer {
         String name = temp[1];
 
         client.setInfo("name",name);
+        client.setInfo("port",DEFAULT_PORT);
+        client.setInfo("id",getID());
 
         String send = client.getInfo("name") + " has joined server";
         listener.onLog(send);
         this.sendToAllClients(String.format("------- %s ------\n",send));
+
+
+        String setID = String.format("#id,%s,%s",client.getInfo("name"),client.getInfo("id"));
+        this.sendToAllClients(setID);
+
+        String setPort = String.format("##,%s,%s",client.getInfo("name"),client.getInfo("port"));
+        this.sendToAllClients(setPort);
+        getObjectFromClient();
     }
 
     private void handleCreateRoom(String message){
 
-        String[] temp =  message.split(",");;
+        String[] temp =  message.split(",");
         String player = temp[1];
         String roomName = temp[2];
+        int ID = Integer.parseInt(temp[3]);
 
         Room room = new Room(roomName);
 
+        for(Player p : players){
+            if(p.getID() == ID) room.addPlayer(p);
+        }
         rooms.add(room);
 
-        this.sendToAllClients("#createRoom," + String.format("%d %-30s room's name: %-30s",room.getRoomNumber(),player,room.getRoomName()));
+        this.sendToAllClients(String.format("#createRoom,%-15d %-30s room's name: %-30s\n",room.getRoomNumber(),player,room.getRoomName()));
     }
 
-    private void handleJoin(String message,ConnectionToClient client){
+    private void handleJoin(String message){
         String[] temp =  message.split(",");
-        int roomNum = Integer.parseInt(temp[0]);
+        int roomNum = Integer.parseInt(temp[1]);
+        int ID = Integer.parseInt(temp[2]);
+
+        int player1;
+        int player2;
 
         for(Room room: rooms){
-            if(room.getRoomNumber() == roomNum)
+            if(room.getRoomNumber() == roomNum){
+                for(Player p : players){
+                    if(p.getID() == ID) {
+                        room.addPlayer(p);
+                        player1 = room.getPlayer1().getID();
+                        player2 = room.getPlayer2().getID();
+                        room.start();
+
+                        sendToAllClients(String.format("#joinToRoom,%d,%d",player1,player2));
+//                        sendObjectToClient(room);
+                    }
+
+                }
+                return;
+            }
         }
-    }
     }
 
     public static int getRoomNumber() {
         return ROOM_NUMBER++;
     }
+
+
+    private static int getDefaultPort() {
+        return DEFAULT_PORT;
+    }
+
+    private static int getID(){
+        return ID++;
+    }
+
+    public Object getObjectFromClient() {
+
+        try {
+            serverSocket = new ServerSocket(getDefaultPort());
+            socket = serverSocket.accept();
+
+
+            inputStream = new ObjectInputStream(socket.getInputStream());
+
+            Player player = (Player) inputStream.readObject();
+            players.add(player);
+            DEFAULT_PORT++;
+            socket.close();
+
+        } catch (SocketException se) {
+            System.exit(0);
+            se.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException cn) {
+            cn.printStackTrace();
+        }
+        return player;
+
+    }
+
+    public void sendObjectToClient(Object obj){
+
+        while (!isConnected) {
+            try {
+                socket = new Socket(host, 4445);
+                isConnected = true;
+                outputStream = new ObjectOutputStream(socket.getOutputStream());
+
+                outputStream.writeObject(obj);
+                socket.shutdownOutput();
+
+            } catch (SocketException se) {
+                se.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+//        try {
+//            serverSocket = new ServerSocket(4445);
+//            socket = serverSocket.accept();
+//            System.out.println("Connected");
+//            inputStream = new ObjectInputStream(socket.getInputStream());
+//
+//            Player student = (Student) inputStream.readObject();
+//            System.out.println("Object received = " + student);
+//            socket.close();
+//
+//        } catch (SocketException se) {
+//            System.exit(0);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        } catch (ClassNotFoundException cn) {
+//            cn.printStackTrace();
+//        }
+    }
+
+
 }

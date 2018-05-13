@@ -55,4 +55,9 @@ public class ServerController implements MessageListener {
     public void onLog(String message) {
         textArea.appendText(message + "\n");
     }
+
+    @Override
+    public void changeTo(String fxml) {
+
+    }
 }

@@ -10,7 +10,7 @@
    <children>
       <Button fx:id="button" layoutX="68.0" layoutY="109.0" mnemonicParsing="false" onAction="#handleStart" text="Start Listening" />
       <Label layoutX="80.0" layoutY="33.0" prefHeight="24.0" prefWidth="90.0" text="Port to listen" textAlignment="CENTER" />
-      <TextField fx:id="textField" layoutX="32.0" layoutY="65.0" onAction="#handleStart" />
+      <TextField fx:id="textField" layoutX="32.0" layoutY="65.0" onAction="#handleStart" text="1" />
       <TextArea fx:id="textArea" layoutX="28.0" layoutY="159.0" prefHeight="200.0" prefWidth="200.0" />
       <Label layoutX="22.0" layoutY="380.0" text="Status:" />
       <Label fx:id="massageLabel" layoutX="80.0" layoutY="380.0" prefHeight="21.0" prefWidth="156.0" />

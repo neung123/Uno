@@ -1,19 +1,23 @@
 package model;
 
 import card.Card;
+import network.Server;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Player {
+public class Player implements Serializable{
     private String name;
     private ArrayList<Card> playerCards;
-    private int score = 0;
     private boolean isTurn = false;
     private boolean sayUno = false;
+    private final int ID;
 
-    public Player(String name){
+    public Player(String name,int ID){
         this.name = name;
         playerCards = new ArrayList<Card>();
+        this.ID = ID;
+        System.out.println(ID);
     }
 
     public String getName(){
@@ -44,7 +48,7 @@ public class Player {
     public boolean isTurn(){
         return isTurn;
     }
-    
+
     public boolean getSaidUNO(){
         return sayUno;
     }
@@ -57,5 +61,12 @@ public class Player {
         sayUno = false;
     }
 
+    public int getID() {
+        return ID;
+    }
 
+    @Override
+    public String toString() {
+        return getName() + getID();
+    }
 }

@@ -54,6 +54,8 @@ public class StartMenuController {
         String name = inputNameField.getText();
         if (name.equals(""))name = "Player 1";
 
+
+
         try {
             clientPlayer = new Client(host, portNum, name);
 
