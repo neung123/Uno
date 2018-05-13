@@ -18,14 +18,16 @@ public class CardDeck {
     String[] WildTypes = {"0", "+4"};
     int[] UNO_NUMBERS =  {0,1,2,3,4,5,6,7,8,9};
 
-    CardDeck(){
+    public CardDeck(){
         addCards();
         addToStack();
     }
 
     public void addToStack(){
         ArrayList<Card> cards = new ArrayList<>(defaultDeck);
-        Collections.shuffle(cards);
+
+        //shuffle 3 times
+        for(int i = 1; i<= 3; i++) Collections.shuffle(cards);
 
         for (Card c: cards) shuffleDeck.add(c);
     }
@@ -33,6 +35,10 @@ public class CardDeck {
     public Card getCard(){
         if(shuffleDeck.empty()) addToStack();
         return shuffleDeck.pop();
+    }
+
+    public Stack<Card> getAllCards() {
+        return shuffleDeck;
     }
 
     private void addCards() {

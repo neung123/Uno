@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="150.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="display.client.CreateRoomController">
+    <children>
+        <ImageView fx:id="imageView" fitHeight="150.0" fitWidth="700.0" pickOnBounds="true" preserveRatio="true">
+            <image>
+                <Image url="@../../../pic/createRoom.jpg" />
+            </image>
+        </ImageView>
+        <Button fx:id="button" layoutX="484.0" layoutY="43.0" mnemonicParsing="false" onAction="#handleEnter" prefHeight="73.0" prefWidth="163.0" style="-fx-background-color: transparent;" />
+        <TextField fx:id="textField" layoutX="54.0" layoutY="54.0" onAction="#handleEnter" prefHeight="49.0" prefWidth="358.0" style="-fx-background-color: transparent;" />
+    </children>
+</AnchorPane>

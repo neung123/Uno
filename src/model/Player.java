@@ -24,6 +24,10 @@ public class Player {
         playerCards.add(card);
     }
 
+    public void removeCard(Card card){
+        playerCards.remove(card);
+    }
+
     public  ArrayList<Card> getAllCards(){
         return playerCards;
     }
@@ -36,22 +40,11 @@ public class Player {
         return playerCards.contains(card);
     }
 
-    public void removeCard(Card card){
-        playerCards.remove(card);
-    }
-
-//    public void toggleTurn(){
-//        isMyTurn = (isMyTurn) ? false : true;
-//    }
 
     public boolean isTurn(){
         return isTurn;
     }
-
-//    public boolean hasCards(){
-//        return (myCards.isEmpty()) ? false : true;
-//    }
-
+    
     public boolean getSaidUNO(){
         return sayUno;
     }
@@ -64,8 +57,5 @@ public class Player {
         sayUno = false;
     }
 
-//    public void setCards(){
-//        myCards = new LinkedList<UNOCard>();
-//    }
 
 }
