@@ -7,20 +7,23 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.SocketException;
+import java.util.ArrayList;
 
 
 public class Client extends AbstractClient {
     private static Socket socket = null;
-    private static ObjectInputStream inputStream = null;
     private static ObjectOutputStream outputStream = null;
     private static boolean isConnected = false;
 
     MessageListener listener;
+    CardListener cardListener;
     static String host;
     String clientName;
     boolean isCreate = false;
     static int port;
     public static Player player;
+    public static int inRoom;
+    private int ID;
 
     /**
      * Constructs the client.
@@ -69,15 +72,18 @@ public class Client extends AbstractClient {
         this.listener = listener;
     }
 
+    public void setCardListener(CardListener listener) {
+        this.cardListener = listener;
+    }
     public static Player getPlayer() { return player; }
 
     @Override
     protected void handleMessageFromServer(Object msg) {
         String message = msg.toString();
+        System.out.println(message);
 
         if(message.contains("#createRoom")) {
             String[] temp = message.split(",");
-            ;
             String msgRoom = temp[1];
 
             listener.onLog(msgRoom.toString());
@@ -86,6 +92,7 @@ public class Client extends AbstractClient {
             String[] temp =  message.split(",");
             String name = temp[1];
             int id = Integer.parseInt(temp[2]);
+            ID = id;
 
             if(name.equals(clientName)) {
                 player = new Player(name, id);
@@ -105,20 +112,62 @@ public class Client extends AbstractClient {
             String[] temp = message.split(",");
             int ID1 = Integer.parseInt(temp[1]);
             int ID2 = Integer.parseInt(temp[2]);
-            System.out.println(message);
-
-            System.out.println("id1 =" + ID1 + " id2 =" + ID2 + player.getID() );
+            int room = Integer.parseInt(temp[3]);
 
             if (ID1 == player.getID() || ID2 == player.getID()) {
                 if (ID2 == 0) return;
-                System.out.println("join");
                 listener.changeTo("InUnoGame.fxml");
+
+                inRoom = room;
             }
             return;
+        }if(message.contains("#roomMid")){
+            String[] temp = message.split(",");
+            int ID1 = Integer.parseInt(temp[1]);
+            int ID2 = Integer.parseInt(temp[2]);
+            String[] defaultCard = temp[3].split(" ");
+            int roomNum = Integer.parseInt(temp[4]);
+
+            String color = defaultCard [0];
+            String value = defaultCard [1];
+            String card = String.format("/card_all/%s_%s.jpg",color,value);
+            int mine;
+            if (ID1 == player.getID() || ID2 == player.getID()) {
+                cardListener.middleCard(card);
+
+                if(ID1 == player.getID()) {
+                    mine = ID1;
+                }else {
+                    mine = ID2;
+                }
+            }else return;
+
+            /** "#roomSetMine,roomNum,this player's id,another's id" **/
+            sendMessage(String.format("#roomSetMine,%d", mine));
+         return;
+        }if(message.contains("#roomSetMine")){
+            String[] temp = message.split(",");
+            int ID1 = Integer.parseInt(temp[1]);
+            int anotherNum = Integer.parseInt(temp[2]);
+            ArrayList<String> deck = new ArrayList<>();
+
+            if (ID1 == player.getID()) {
+            for(int i = 0; i < temp.length - 3; i++) {
+                String[] defaultCard = temp[3 + i].split(" ");
+                String color = defaultCard [0];
+                String value = defaultCard [1];
+                String card = String.format("/card_all/%s_%s.jpg",color,value);
+
+                deck.add(card);
+            }
+                cardListener.showMine(deck);
+                cardListener.showOther(anotherNum);
+            }
+            return;
+
         }
 
         listener.onMessage(msg.toString());
-        System.out.println((msg.toString()));
     }
 
     public boolean isCreate(String roomName) {
@@ -128,6 +177,10 @@ public class Client extends AbstractClient {
 
         isCreate = true;
         return false;
+    }
+
+    public int getID() {
+        return ID;
     }
 
     private static void sendObjectToServer(Object obj){
@@ -147,5 +200,6 @@ public class Client extends AbstractClient {
             }
         }
     }
+
 
 }

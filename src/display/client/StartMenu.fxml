@@ -21,6 +21,5 @@
          </font>
       </TextField>
       <Button fx:id="enterButton" layoutX="471.0" layoutY="408.0" mnemonicParsing="false" onAction="#handleEnter" prefHeight="113.0" prefWidth="259.0" style="-fx-background-color: transparent;" />
-      <Button fx:id="helpButton" layoutX="471.0" layoutY="547.0" mnemonicParsing="false" onAction="#handleHelp" prefHeight="113.0" prefWidth="259.0" style="-fx-background-color: transparent;" />
    </children>
 </AnchorPane>

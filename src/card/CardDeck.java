@@ -4,11 +4,12 @@ package card;
  *
  * @author Pornpavee Seri-umnuoy
  */
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Stack;
 
-public class CardDeck {
+public class CardDeck implements Serializable {
 
     public ArrayList<Card> defaultDeck = new ArrayList<>();
     public Stack<Card> shuffleDeck = new Stack<>();

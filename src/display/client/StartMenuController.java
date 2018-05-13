@@ -33,8 +33,7 @@ public class StartMenuController {
     TextField inputNameField;
     @FXML
     Button enterButton;
-    @FXML
-    Button helpButton;
+
 
     public static Client clientPlayer;
 
@@ -42,10 +41,9 @@ public class StartMenuController {
     @FXML
     public void initialize() {
         Image imageBG =  new Image(getClass().getResourceAsStream("/startwin.jpg"));
-        Image imageHelpBT = new Image(getClass().getResourceAsStream("/button_help.png"));
         Image imageEnterBT = new Image(getClass().getResourceAsStream("/button_enter.png"));
         imageViewStart.setImage(imageBG);
-        helpButton.setGraphic(new ImageView(imageHelpBT));
+
         enterButton.setGraphic(new ImageView(imageEnterBT));
     }
 
@@ -71,14 +69,6 @@ public class StartMenuController {
             getStage().close();
         }
 
-    }
-
-    public void handleHelp() throws IOException{
-        Stage stage = (Stage) imageViewStart.getScene().getWindow();
-        Parent root = FXMLLoader.load(getClass().getResource("HelpDisplay.fxml"));
-        stage.setScene(new Scene(root));
-        stage.setResizable(false);
-        stage.show();
     }
 
     public static void exceptionAlert(String statement){

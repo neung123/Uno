@@ -3,9 +3,10 @@ package model;
 import card.Card;
 import card.CardDeck;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Dealer {
+public class Dealer implements Serializable {
     public final int START_CARD_FOR_PLAYER = 7;
 
     private CardDeck cardDeck;

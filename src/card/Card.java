@@ -2,7 +2,9 @@ package card;
 
 import javafx.scene.image.Image;
 
-public class Card implements CardInterface {
+import java.io.Serializable;
+
+public class Card implements CardInterface,Serializable {
     String color = null;
     String cardValue = null;
     int cardPoint = 0;
@@ -16,10 +18,17 @@ public class Card implements CardInterface {
     }
 
 
+
     @Override
     public Image getCardImage() {
         String card = color.charAt(0) + "_" + cardValue;
         return new Image(getClass().getResourceAsStream("/card_all/" + card ));
+    }
+
+    @Override
+    public String getCardImageString() {
+        String card = color.charAt(0) + " " + cardValue;
+        return card;
     }
 
     @Override

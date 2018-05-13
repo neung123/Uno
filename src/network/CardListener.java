@@ -2,9 +2,11 @@ package network;
 
 import card.Card;
 
+import java.util.ArrayList;
+
 public interface CardListener {
-    void middleCard(Card card);
-    void showMine();
-    void showOther();
+    void middleCard(String card);
+    void showMine(ArrayList<String> cards);
+    void showOther(int cards);
 
 }

@@ -17,7 +17,6 @@ public class Player implements Serializable{
         this.name = name;
         playerCards = new ArrayList<Card>();
         this.ID = ID;
-        System.out.println(ID);
     }
 
     public String getName(){
@@ -36,6 +35,14 @@ public class Player implements Serializable{
         return playerCards;
     }
 
+    public  ArrayList<String> getAllCardsString(){
+        ArrayList<String> temp = new ArrayList<>();
+
+        for(Card c: playerCards) temp.add(c.getCardImageString());
+
+        return temp;
+    }
+
     public int getTotalCards(){
         return playerCards.size();
     }
@@ -46,7 +53,13 @@ public class Player implements Serializable{
 
 
     public boolean isTurn(){
+        System.out.println(getName() + getID() + isTurn);
         return isTurn;
+    }
+
+    public void setTurn(boolean turn) {
+        isTurn = turn;
+        System.out.println(getName() + getID() + isTurn);
     }
 
     public boolean getSaidUNO(){

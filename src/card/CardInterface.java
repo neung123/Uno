@@ -2,12 +2,11 @@ package card;
 
 import javafx.scene.image.Image;
 
-public interface CardInterface{
+public interface CardInterface {
 
     Image getCardImage();
-
+    String getCardImageString();
     String getColor();
-
 
     String getValue();
 

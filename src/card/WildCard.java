@@ -1,7 +1,9 @@
 package card;
 
 
-public class WildCard extends Card {
+import java.io.Serializable;
+
+public class WildCard extends Card implements Serializable {
 
     private String chosenColor;
 
