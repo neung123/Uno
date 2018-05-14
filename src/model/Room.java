@@ -38,7 +38,7 @@ public class Room implements Serializable {
     }
 
     public void addPlayer(Player player){
-        players.add(player);
+        if(!isFull()) players.add(player);
     }
 
     public Player getPlayer1() {
@@ -147,6 +147,8 @@ public class Room implements Serializable {
 
         return isOver;
     }
+
+    public boolean isFull(){ return players.size() == MAX_PLAYER;}
 
 
     @Override

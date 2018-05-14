@@ -29,7 +29,8 @@ public class Player implements Serializable{
 
     public void removeCard(Card card){
         playerCards.remove(card);
-        System.out.println("remove" + card);
+        System.out.println("remove:" + card);
+        System.out.println(playerCards);
     }
 
     public  ArrayList<Card> getAllCards(){

@@ -61,6 +61,11 @@ public class Card implements CardInterface,Serializable {
     }
 
     @Override
+    public String toString() {
+        return String.format("Card is:%s %s",getColor(),getValue());
+    }
+
+    @Override
     public boolean equals(Object obj) {
         if(obj == null) return false;
         if(obj.getClass() != getClass()) return false;

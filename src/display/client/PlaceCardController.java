@@ -38,8 +38,6 @@ public class PlaceCardController {
         }catch (ArrayIndexOutOfBoundsException e){
             return;
         }
-        System.out.println(getPlayer().getID());
-        System.out.println(getCard);
 
         Platform.runLater(
                 () -> {

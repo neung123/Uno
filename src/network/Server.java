@@ -229,7 +229,9 @@ public class Server extends AbstractServer {
 
             if (room.play(tempCard, playerPlay)) {
                 String cardToSend = room.getCurrentCardString();
+                System.out.println(cardToSend);
                 sendToAllClients(String.format("#roomMid,%d,%d,%s,%d", player1, player2, cardToSend, room.getRoomNumber()));
+                System.out.println(String.format("#removeCard,%d,%s", player1, cardToSend));
                 sendToAllClients(String.format("#removeCard,%d,%s", player1, cardToSend));
                 sendToAllClients(String.format("#setTurn,%d,%s",player1,"false"));
                 sendToAllClients(String.format("#setTurn,%d,%s",player2,"true"));
