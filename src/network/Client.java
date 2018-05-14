@@ -1,4 +1,5 @@
 package network;
+import card.Card;
 import client.AbstractClient;
 import model.Player;
 
@@ -165,6 +166,29 @@ public class Client extends AbstractClient {
             }
             return;
 
+        }if(message.contains("#setTurn")) {
+            String[] temp = message.split(",");
+            int ID1 = Integer.parseInt(temp[1]);
+            boolean turn = Boolean.parseBoolean(temp[2]);
+
+
+            if (ID1 == player.getID()) {
+                player.setTurn(turn);
+            }
+            return;
+        }if(message.contains("#removeCard")){
+            String[] temp = message.split(",");
+            int ID1 = Integer.parseInt(temp[1]);
+            String[] newCard = temp[2].split(" ");
+            String color = newCard[0];
+            String value = newCard[1];
+
+            Card card = new Card(color,value,0);
+            System.out.println("card to remove" + card);
+
+            player.removeCard(card);
+
+            sendMessage(String.format("#roomSetMine,%d", ID1));
         }
 
         listener.onMessage(msg.toString());
@@ -199,6 +223,38 @@ public class Client extends AbstractClient {
                 e.printStackTrace();
             }
         }
+    }
+
+//    public Card createCard(String newCard){
+//        String[] defaultCard = temp[3 + i].split(" ");
+//        String color = defaultCard [0];
+//        String value = defaultCard [1];
+//    }
+
+    public Card createCardUnder(String newCard){
+        String[] temp = newCard.split("_");
+        String color = null;
+        System.out.println(temp[1]);
+        String[] temp1 = temp[1].split("\\.");
+        String value = temp1[0];
+        switch (temp[0]){
+            case "r":
+                color = "red";
+                break;
+            case "g":
+                color = "green";
+                break;
+            case "b":
+                color = "blue";
+                break;
+            case "y":
+                color = "yellow";
+                break;
+            case "w":
+                color = "wild";
+                break;
+        }
+        return new Card(color, value, 0);
     }
 
 

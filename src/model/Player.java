@@ -29,6 +29,7 @@ public class Player implements Serializable{
 
     public void removeCard(Card card){
         playerCards.remove(card);
+        System.out.println("remove" + card);
     }
 
     public  ArrayList<Card> getAllCards(){
@@ -47,10 +48,13 @@ public class Player implements Serializable{
         return playerCards.size();
     }
 
+    public boolean hasCards(){
+        return getTotalCards() <= 0;
+    }
+
     public boolean hasCard(Card card){
         return playerCards.contains(card);
     }
-
 
     public boolean isTurn(){
         System.out.println(getName() + getID() + isTurn);
@@ -59,7 +63,6 @@ public class Player implements Serializable{
 
     public void setTurn(boolean turn) {
         isTurn = turn;
-        System.out.println(getName() + getID() + isTurn);
     }
 
     public boolean getSaidUNO(){

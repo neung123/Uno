@@ -1,5 +1,6 @@
 package display.client;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
@@ -7,6 +8,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import network.Client;
+
+import java.io.IOException;
 
 import static display.client.InUnoController.cards;
 import static display.client.StartMenuController.clientPlayer;
@@ -37,7 +40,12 @@ public class PlaceCardController {
         }
         System.out.println(getPlayer().getID());
         System.out.println(getCard);
-        clientPlayer.sendMessage(String.format("#play,%d,%d", getPlayer().getID(),getCard));
+
+        Platform.runLater(
+                () -> {
+                    clientPlayer.sendMessage(String.format("#play,%d,%s", getPlayer().getID(),getCard));
+                }
+        );
 
         getStage().close();
     }

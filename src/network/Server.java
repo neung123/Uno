@@ -27,7 +27,6 @@ public class Server extends AbstractServer {
     private ServerSocket serverSocket = null;
     private Socket socket = null;
     private ObjectInputStream inputStream = null;
-    private ObjectOutputStream outputStream = null;
 
     private static LocalTime time = LocalTime.now();
     private static DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm");
@@ -69,8 +68,9 @@ public class Server extends AbstractServer {
         }if(message.contains("#roomSetMine")){
             handleSetMine(message);
             return;
-        }if(message.contains("#play")){
+        }if(message.contains("#play")) {
             handlePlay(message);
+            return;
         }
 
         String ms = String.format("%s(%s): %s\n",client.getInfo("name"),time.format(dtf),msg.toString());
@@ -151,6 +151,7 @@ public class Server extends AbstractServer {
                         room.start();
 
                         sendToAllClients(String.format("#joinToRoom,%d,%d,%d",player1,player2,room.getRoomNumber()));
+                        sendToAllClients(String.format("#setTurn,%d,%s",player1,"true"));
                     }
 
                 }
@@ -211,33 +212,30 @@ public class Server extends AbstractServer {
         String[] temp = message.split(",");
         int player = Integer.parseInt(temp[1]);
         String card = temp[2];
-        System.out.println(player + card);
+        String[] split = card.split("/");
 
+        String tempCard = split[2];
+
+        Player playerPlay;
         int player1;
         int player2;
+        for (Room room : rooms) {
+            if (room.getPlayer1().getID() == player) {
+                playerPlay = room.getPlayer1();
+                player1 = room.getPlayer1().getID();
+                player2 = room.getPlayer2().getID();
+            }else return;
 
-//        int mine = Integer.parseInt(temp[1]);
-//
-//        ArrayList<String> tempCards = new ArrayList<>();
-//        int another = 0;
-//
-//        for (Room room : rooms) {
-//            if (room.getPlayer1().getID() == mine) {
-//                tempCards = room.getPlayer1().getAllCardsString();
-//                another = room.getPlayer2().getTotalCards();
-//            } else if (room.getPlayer2().getID() == mine) {
-//                tempCards = room.getPlayer2().getAllCardsString();
-//                another = room.getPlayer1().getTotalCards();
-//            } else return;
-//
-//            String allCards = "";
-//            for (int i = 0; i < tempCards.size(); i++) {
-//                if (i == 0) allCards += tempCards.get(i);
-//                else allCards += String.format(",%s", tempCards.get(i));
-//            }
-//
-//            sendToAllClients(String.format("#roomSetMine,%d,%d,%s", mine, another, allCards));
-//        }
+
+            if (room.play(tempCard, playerPlay)) {
+                String cardToSend = room.getCurrentCardString();
+                sendToAllClients(String.format("#roomMid,%d,%d,%s,%d", player1, player2, cardToSend, room.getRoomNumber()));
+                sendToAllClients(String.format("#removeCard,%d,%s", player1, cardToSend));
+                sendToAllClients(String.format("#setTurn,%d,%s",player1,"false"));
+                sendToAllClients(String.format("#setTurn,%d,%s",player2,"true"));
+            }
+        }
+
     }
 
 

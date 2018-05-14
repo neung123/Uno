@@ -59,4 +59,14 @@ public class Card implements CardInterface,Serializable {
     public static int getHeight() {
         return HEIGHT;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj == null) return false;
+        if(obj.getClass() != getClass()) return false;
+
+        Card other = (Card) obj;
+
+        return (this.getColor().equals(other.color)) && (this.getValue().equals(other.cardValue));
+    }
 }

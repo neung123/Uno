@@ -63,9 +63,8 @@ public class InUnoController implements CardListener{
     }
 
     public void handlePlace() {
-        System.out.println(getPlayer().isTurn());
 
-//        if (getPlayer().isTurn()) {
+        if (getPlayer().isTurn()) {
             try {
                 Parent root = FXMLLoader.load(getClass().getResource("PlaceCard.fxml"));
                 Scene secondScene = new Scene(root);
@@ -86,7 +85,7 @@ public class InUnoController implements CardListener{
             } catch (IOException e) {
                 exceptionAlert("Can not open CreateRoom.fxml");
             }
-//        }
+        }
     }
 
 
