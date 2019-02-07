@@ -21,8 +21,9 @@ public class Client extends AbstractClient {
     static String host;
     String clientName;
     boolean isCreate = false;
+    boolean canPlay = false;
     static int port;
-    public static Player player;
+//    public static Player player;
     public static int inRoom;
     private int ID;
 
@@ -76,7 +77,6 @@ public class Client extends AbstractClient {
     public void setCardListener(CardListener listener) {
         this.cardListener = listener;
     }
-    public static Player getPlayer() { return player; }
 
     @Override
     protected void handleMessageFromServer(Object msg) {
@@ -92,21 +92,19 @@ public class Client extends AbstractClient {
         }if (message.contains("#id")) {
             String[] temp =  message.split(",");
             String name = temp[1];
+            if(!name.equals(clientName)) return;
             int id = Integer.parseInt(temp[2]);
             ID = id;
 
-            if(name.equals(clientName)) {
-                player = new Player(name, id);
-            }
             return;
         }if (message.contains("##")) {
         String[] temp =  message.split(",");;
         String name = temp[1];
-
-        if(name.equals(player.getName())) {
-            port = Integer.parseInt(temp[2]);
-            sendObjectToServer(player);
-        }
+//
+//        if(name.equals(player.getName())) {
+//            port = Integer.parseInt(temp[2]);
+//            sendObjectToServer(player);
+//        }
 
         return;
     }if(message.contains("#joinToRoom")) {
@@ -114,8 +112,7 @@ public class Client extends AbstractClient {
             int ID1 = Integer.parseInt(temp[1]);
             int ID2 = Integer.parseInt(temp[2]);
             int room = Integer.parseInt(temp[3]);
-
-            if (ID1 == player.getID() || ID2 == player.getID()) {
+            if (ID1 == ID || ID2 == ID) {
                 if (ID2 == 0) return;
                 listener.changeTo("InUnoGame.fxml");
 
@@ -133,10 +130,10 @@ public class Client extends AbstractClient {
             String value = defaultCard [1];
             String card = String.format("/card_all/%s_%s.jpg",color,value);
             int mine;
-            if (ID1 == player.getID() || ID2 == player.getID()) {
+            if (ID1 == ID || ID2 == ID) {
                 cardListener.middleCard(card);
 
-                if(ID1 == player.getID()) {
+                if(ID1 == ID) {
                     mine = ID1;
                 }else {
                     mine = ID2;
@@ -152,7 +149,7 @@ public class Client extends AbstractClient {
             int anotherNum = Integer.parseInt(temp[2]);
             ArrayList<String> deck = new ArrayList<>();
 
-            if (ID1 == player.getID()) {
+            if (ID1 == ID) {
             for(int i = 0; i < temp.length - 3; i++) {
                 String[] defaultCard = temp[3 + i].split(" ");
                 String color = defaultCard [0];
@@ -161,6 +158,7 @@ public class Client extends AbstractClient {
 
                 deck.add(card);
             }
+                System.out.println("currrent-->" + deck);
                 cardListener.showMine(deck);
                 cardListener.showOther(anotherNum);
             }
@@ -172,9 +170,9 @@ public class Client extends AbstractClient {
             boolean turn = Boolean.parseBoolean(temp[2]);
 
 
-            if (ID1 == player.getID()) {
-                player.setTurn(turn);
-            }
+//            if (ID1 == ID) {
+//                player.setTurn(turn);
+//            }
             return;
         }if(message.contains("#removeCard")){
             String[] temp = message.split(",");
@@ -186,7 +184,7 @@ public class Client extends AbstractClient {
             Card card = new Card(color,value,0);
             System.out.println("card to remove" + card);
 
-            player.removeCard(card);
+//            player.removeCard(card);
 
             sendMessage(String.format("#roomSetMine,%d", ID1));
         }
@@ -197,7 +195,7 @@ public class Client extends AbstractClient {
     public boolean isCreate(String roomName) {
 
         if (isCreate) return true;
-        handleMessageFromClient("#createRoom," + String.format("%s,%s,%d", getClientName(), roomName,player.getID()));
+        handleMessageFromClient("#createRoom," + String.format("%s,%s", getClientName(), roomName));
 
         isCreate = true;
         return false;
@@ -257,5 +255,11 @@ public class Client extends AbstractClient {
         return new Card(color, value, 0);
     }
 
+    public boolean isCanPlay() {
+        return canPlay;
+    }
 
+    public void setCanPlay(boolean canPlay) {
+        this.canPlay = canPlay;
+    }
 }

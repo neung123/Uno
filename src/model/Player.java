@@ -30,7 +30,7 @@ public class Player implements Serializable{
     public void removeCard(Card card){
         playerCards.remove(card);
         System.out.println("remove:" + card);
-        System.out.println(playerCards);
+        System.out.println("current is:" + playerCards);
     }
 
     public  ArrayList<Card> getAllCards(){
@@ -41,6 +41,7 @@ public class Player implements Serializable{
         ArrayList<String> temp = new ArrayList<>();
 
         for(Card c: playerCards) temp.add(c.getCardImageString());
+        System.out.println("get string " + playerCards);
 
         return temp;
     }

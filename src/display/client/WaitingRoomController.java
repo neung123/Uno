@@ -81,6 +81,7 @@ public class WaitingRoomController implements MessageListener{
 
 
             stage.show();
+            stage.setOnCloseRequest(event -> System.exit(0));
         }catch (IOException e){
             exceptionAlert("Can not open CreateRoom.fxml");
         }

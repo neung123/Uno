@@ -8,7 +8,6 @@ import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
 import static display.client.StartMenuController.clientPlayer;
-import static network.Client.getPlayer;
 
 public class JoinRoomController {
     @FXML
@@ -27,7 +26,7 @@ public class JoinRoomController {
 
     public void handleEnter(){
         roomToJoin = Integer.parseInt(textField.getText());
-        clientPlayer.sendMessage(String.format("#joinRoom,%d,%d",roomToJoin,getPlayer().getID()));
+        clientPlayer.sendMessage(String.format("#joinRoom,%d,%d",roomToJoin,clientPlayer.getID()));
 
         getStage().close();
     }

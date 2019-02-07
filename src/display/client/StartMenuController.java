@@ -63,6 +63,7 @@ public class StartMenuController {
             stage.setResizable(false);
             stage.sizeToScene();
             stage.show();
+            stage.setOnCloseRequest(event -> System.exit(0));
 
         }catch (IOException e) {
             exceptionAlert("Can not connect to Server");

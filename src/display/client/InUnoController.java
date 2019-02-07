@@ -27,9 +27,7 @@ import java.util.ArrayList;
 
 import static display.client.StartMenuController.clientPlayer;
 import static display.client.StartMenuController.exceptionAlert;
-import static network.Client.getPlayer;
 import static network.Client.inRoom;
-import static network.Client.player;
 
 public class InUnoController implements CardListener{
     @FXML
@@ -64,7 +62,7 @@ public class InUnoController implements CardListener{
 
     public void handlePlace() {
 
-        if (getPlayer().isTurn()) {
+        if (clientPlayer.isCanPlay()) {
             try {
                 Parent root = FXMLLoader.load(getClass().getResource("PlaceCard.fxml"));
                 Scene secondScene = new Scene(root);

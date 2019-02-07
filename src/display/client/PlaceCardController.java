@@ -13,7 +13,6 @@ import java.io.IOException;
 
 import static display.client.InUnoController.cards;
 import static display.client.StartMenuController.clientPlayer;
-import static network.Client.getPlayer;
 
 public class PlaceCardController {
     @FXML
@@ -41,7 +40,7 @@ public class PlaceCardController {
 
         Platform.runLater(
                 () -> {
-                    clientPlayer.sendMessage(String.format("#play,%d,%s", getPlayer().getID(),getCard));
+                    clientPlayer.sendMessage(String.format("#play,%d,%s", clientPlayer.getID(),getCard));
                 }
         );
 
